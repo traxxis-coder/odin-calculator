@@ -23,6 +23,15 @@ body {
     border-radius: 12px;
     margin: 12px;
     margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#display p {
+    margin-right: 12px;
+    font-size: 56px;
+    font-weight: bold;
 }
 
 #buttons {
@@ -40,6 +49,8 @@ button {
     border: none;
     border-radius: 12px;
     flex: 1 0 auto;
+    font-size: 56px;
+    font-weight: bold;
 }
 
 button#clear {
