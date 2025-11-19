@@ -21,17 +21,13 @@ let operator = "";
 function operate(a, b, sign) {
     switch (sign) {
         case "+":
-            add(a, b);
-            break;
+            return add(+a, +b);
         case "-":
-            subtract(a, b);
-            break;
+            return subtract(+a, +b);
         case "*":
-            multiply(a, b);
-            break;
+            return multiply(+a, +b);
         case "/":
-            divide(a, b);
-        break;
+            return divide(+a, +b);
     };       
 };
 
@@ -122,21 +118,64 @@ buttons.forEach((button) => {
                 };
                 break;
             case "zero":
-                if (operator && firstArg != "") {
+                if (operator && secondArg != "") {
                     secondArg += "0";
                     display.textContent = secondArg;
-                } else {
+                } else if (firstArg != ""){
                     firstArg += "0";
                     display.textContent = firstArg;
                 };
                 break;
-            case "plus":
+            case "add":
                 if (secondArg) {
-                    firstArg = operate(firstArg, secondArg, operator);
+                    let result = operate(firstArg, secondArg, operator);
+                    firstArg = result;
+                    display.textContent = firstArg;
                     secondArg = "";
-                    operator = "+";
                 }
-
+                operator = "+";
+                break;
+            case "subtract":
+                if (secondArg) {
+                    let result = operate(firstArg, secondArg, operator);
+                    firstArg = result;
+                    display.textContent = firstArg;
+                    secondArg = "";
+                }
+                operator = "-";
+                break;
+            case "multiply":
+                if (secondArg) {
+                    let result = operate(firstArg, secondArg, operator);
+                    firstArg = result;
+                    display.textContent = firstArg;
+                    secondArg = "";
+                }
+                operator = "*";
+                break;
+            case "divide":
+                if (secondArg) {
+                    let result = operate(firstArg, secondArg, operator);
+                    firstArg = result;
+                    display.textContent = firstArg;
+                    secondArg = "";
+                }
+                operator = "/";
+                break;
+            case "equals":
+                if (secondArg) {
+                    let result = operate(firstArg, secondArg, operator);
+                    firstArg = result;
+                    display.textContent = firstArg;
+                    secondArg = "";
+                    operator = "";
+                }
+                break;
+            case "clear":
+                firstArg = "";
+                secondArg = "";
+                operator = "";
+                display.textContent = "0";
         }
     })
 })
