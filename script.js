@@ -38,6 +38,8 @@ function divide(a, b) {
 let firstArg = "";
 let secondArg = "";
 let operator = "";
+// the ans variable will check whether we're working with a previous answer
+let ans = false;
 
 function operate(a, b, sign) {
     switch (sign) {
@@ -62,13 +64,19 @@ buttons.forEach((button) => {
                 secondArg += btnValues.numbers[button.id];
                 display.textContent = secondArg;
             } else {
-                firstArg += btnValues.numbers[button.id];
+                if (ans == true) {
+                    firstArg = btnValues.numbers[button.id];
+                    ans = false;
+                } else {
+                    firstArg += btnValues.numbers[button.id];
+                }
                 display.textContent = firstArg;
             };
         } else if (button.classList.contains("operator")) {
             if (secondArg) {
                 let result = operate(firstArg, secondArg, operator);
                 firstArg = result;
+                ans = true;
                 display.textContent = firstArg;
                 secondArg = "";
             }
@@ -77,6 +85,7 @@ buttons.forEach((button) => {
             if (secondArg) {
                 let result = operate(firstArg, secondArg, operator);
                 firstArg = result;
+                ans = true;
                 display.textContent = firstArg;
                 secondArg = "";
                 operator = "";
@@ -86,6 +95,23 @@ buttons.forEach((button) => {
             secondArg = "";
             operator = "";
             display.textContent = "0";
+        } else if (button.id == "point") {
+
+            if (operator && !secondArg) {
+                secondArg = "0.";
+                display.textContent = secondArg;
+            } else if (operator && secondArg && !secondArg.includes(".")) {
+                secondArg += ".";
+                display.textContent = secondArg;
+            } else {
+                if (ans == true || !firstArg) {
+                    firstArg = "0.";
+                    ans = false;
+                } else if (firstArg && !firstArg.includes(".")) {
+                    firstArg += ".";
+                }
+                display.textContent = firstArg;
+            };
         };
     });
 });
