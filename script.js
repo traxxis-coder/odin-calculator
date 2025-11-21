@@ -32,13 +32,17 @@ function multiply(a, b) {
 };
 
 function divide(a, b) {
-    return a / b;
+    if (b != 0) {
+        return a / b;
+    } else {
+        return "You trying to break me?";
+    }
 };
 
 let firstArg = "";
 let secondArg = "";
 let operator = "";
-// the ans variable will check whether we're working with a previous answer
+// the ans variable will be used to check whether we're working with a previous answer
 let ans = false;
 
 function operate(a, b, sign) {
@@ -96,7 +100,6 @@ buttons.forEach((button) => {
             operator = "";
             display.textContent = "0";
         } else if (button.id == "point") {
-
             if (operator && !secondArg) {
                 secondArg = "0.";
                 display.textContent = secondArg;
@@ -112,6 +115,18 @@ buttons.forEach((button) => {
                 }
                 display.textContent = firstArg;
             };
+        } else if (button.id == "backspace") {
+            if (secondArg) {
+                secondArg = secondArg.slice(0, -1);
+                display.textContent = secondArg || "0";
+            } else if (ans == true) {
+                firstArg = "";
+                display.textContent = "0";
+            } else {
+                firstArg = firstArg.slice(0, -1);
+                display.textContent = firstArg || "0";
+            }
         };
+    display.textContent = +parseFloat(display.textContent).toFixed(14 - (display.textContent.split(".")[0]).length);
     });
 });
