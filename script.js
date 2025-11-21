@@ -58,75 +58,100 @@ function operate(a, b, sign) {
     };       
 };
 
-const buttons = document.querySelectorAll("button");
 const display = document.querySelector("#display p");
+
+function pressNumber(number) {
+    if (operator) {
+        secondArg += btnValues.numbers[number];
+        display.textContent = secondArg;
+    } else {
+        if (ans == true) {
+            firstArg = btnValues.numbers[number];
+            ans = false;
+        } else {
+            firstArg += btnValues.numbers[number];
+        };
+        display.textContent = firstArg;
+    };
+};
+
+function pressOperator(sign) {
+    if (secondArg) {
+        let result = operate(firstArg, secondArg, operator);
+        firstArg = result;
+        ans = true;
+        display.textContent = firstArg;
+        secondArg = "";
+    };
+    operator = btnValues.operators[sign];
+};
+
+function pressEquals() {
+    if (secondArg) {
+        let result = operate(firstArg, secondArg, operator);
+        firstArg = result;
+        ans = true;
+        display.textContent = firstArg;
+        secondArg = "";
+        operator = "";
+    }
+};
+
+function pressClear() {
+    firstArg = "";
+    secondArg = "";
+    operator = "";
+    display.textContent = "0";
+};
+
+function pressPoint() {
+    if (operator && !secondArg) {
+        secondArg = "0.";
+        display.textContent = secondArg;
+    } else if (operator && secondArg && !secondArg.includes(".")) {
+        secondArg += ".";
+        display.textContent = secondArg;
+    } else {
+        if (ans == true || !firstArg) {
+            firstArg = "0.";
+            ans = false;
+        } else if (firstArg && !firstArg.includes(".")) {
+            firstArg += ".";
+        }
+        display.textContent = firstArg;
+    };
+};
+
+function pressBackspace() {
+    if (secondArg) {
+        secondArg = secondArg.slice(0, -1);
+        display.textContent = secondArg || "0";
+    } else if (ans == true) {
+        firstArg = "";
+        display.textContent = "0";
+    } else {
+        firstArg = firstArg.slice(0, -1);
+        display.textContent = firstArg || "0";
+    }
+};
+
+const buttons = document.querySelectorAll("button");
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
         if (button.classList.contains("number")) {
-            if (operator) {
-                secondArg += btnValues.numbers[button.id];
-                display.textContent = secondArg;
-            } else {
-                if (ans == true) {
-                    firstArg = btnValues.numbers[button.id];
-                    ans = false;
-                } else {
-                    firstArg += btnValues.numbers[button.id];
-                }
-                display.textContent = firstArg;
-            };
+            pressNumber(button.id);
         } else if (button.classList.contains("operator")) {
-            if (secondArg) {
-                let result = operate(firstArg, secondArg, operator);
-                firstArg = result;
-                ans = true;
-                display.textContent = firstArg;
-                secondArg = "";
-            }
-            operator = btnValues.operators[button.id];
+            pressOperator(button.id);
         } else if (button.id == "equals") {
-            if (secondArg) {
-                let result = operate(firstArg, secondArg, operator);
-                firstArg = result;
-                ans = true;
-                display.textContent = firstArg;
-                secondArg = "";
-                operator = "";
-            }
-        } else if(button.id == "clear") {
-            firstArg = "";
-            secondArg = "";
-            operator = "";
-            display.textContent = "0";
+            pressEquals();
+        } else if (button.id == "clear") {
+            pressClear();
         } else if (button.id == "point") {
-            if (operator && !secondArg) {
-                secondArg = "0.";
-                display.textContent = secondArg;
-            } else if (operator && secondArg && !secondArg.includes(".")) {
-                secondArg += ".";
-                display.textContent = secondArg;
-            } else {
-                if (ans == true || !firstArg) {
-                    firstArg = "0.";
-                    ans = false;
-                } else if (firstArg && !firstArg.includes(".")) {
-                    firstArg += ".";
-                }
-                display.textContent = firstArg;
-            };
+            pressPoint();
         } else if (button.id == "backspace") {
-            if (secondArg) {
-                secondArg = secondArg.slice(0, -1);
-                display.textContent = secondArg || "0";
-            } else if (ans == true) {
-                firstArg = "";
-                display.textContent = "0";
-            } else {
-                firstArg = firstArg.slice(0, -1);
-                display.textContent = firstArg || "0";
-            }
+            pressBackspace();
         };
-    display.textContent = +parseFloat(display.textContent).toFixed(14 - (display.textContent.split(".")[0]).length);
+        display.textContent = +parseFloat(display.textContent).toFixed(14 - (display.textContent.split(".")[0]).length);
     });
 });
