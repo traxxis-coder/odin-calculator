@@ -62,14 +62,18 @@ const display = document.querySelector("#display p");
 
 function pressNumber(number) {
     if (operator) {
-        secondArg += btnValues.numbers[number];
-        display.textContent = secondArg;
+        if (secondArg.length < 21) {
+            secondArg += number;
+            display.textContent = secondArg;
+        }
     } else {
         if (ans == true) {
-            firstArg = btnValues.numbers[number];
+            firstArg = number;
             ans = false;
         } else {
-            firstArg += btnValues.numbers[number];
+            if (firstArg.length < 21) {
+                firstArg += number;
+            }
         };
         display.textContent = firstArg;
     };
@@ -83,7 +87,7 @@ function pressOperator(sign) {
         display.textContent = firstArg;
         secondArg = "";
     };
-    operator = btnValues.operators[sign];
+    operator = sign;
 };
 
 function pressEquals() {
@@ -140,9 +144,9 @@ const buttons = document.querySelectorAll("button");
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
         if (button.classList.contains("number")) {
-            pressNumber(button.id);
+            pressNumber(btnValues.numbers[button.id]);
         } else if (button.classList.contains("operator")) {
-            pressOperator(button.id);
+            pressOperator(btnValues.operators[button.id]);
         } else if (button.id == "equals") {
             pressEquals();
         } else if (button.id == "clear") {
@@ -152,6 +156,32 @@ buttons.forEach((button) => {
         } else if (button.id == "backspace") {
             pressBackspace();
         };
-        display.textContent = +parseFloat(display.textContent).toFixed(14 - (display.textContent.split(".")[0]).length);
+        if (display.textContent.length > 21) {
+            display.textContent = +parseFloat(display.textContent).toFixed(14 - (display.textContent.split(".")[0]).length);
+        };
     });
 });
+
+document.addEventListener("keydown", (e) => {
+    if (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"].includes(e.key)) {
+        pressNumber(e.key);
+    } else if (["+", "-", "/", "*"].includes(e.key)) {
+        pressOperator(e.key);
+    } else if (e.key == "=" || e.key == "Enter") {
+        e.preventDefault();
+        pressEquals();
+    } else if (e.key == "Escape") {
+        e.preventDefault();
+        pressClear();
+    } else if (e.key == "." || e.key == ",") {
+        pressPoint();
+    } else if(e.key == "Backspace") {
+        pressBackspace();
+    }
+})
+
+document.addEventListener("keypress", (e) => {
+    if (e.key == "Escape" || e.key == "Enter") {
+        e.preventDefault();
+    }
+})
