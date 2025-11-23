@@ -168,20 +168,12 @@ document.addEventListener("keydown", (e) => {
     } else if (["+", "-", "/", "*"].includes(e.key)) {
         pressOperator(e.key);
     } else if (e.key == "=" || e.key == "Enter") {
-        e.preventDefault();
         pressEquals();
     } else if (e.key == "Escape") {
-        e.preventDefault();
         pressClear();
     } else if (e.key == "." || e.key == ",") {
         pressPoint();
     } else if(e.key == "Backspace") {
         pressBackspace();
-    }
-})
-
-document.addEventListener("keypress", (e) => {
-    if (e.key == "Escape" || e.key == "Enter") {
-        e.preventDefault();
     }
 })
